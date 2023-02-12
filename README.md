@@ -43,7 +43,7 @@ npm run cli help
 
 ### `push`
 
-Pushes your project to your 42 intranet. (or to any git repository)
+Pushes your project to your 42 intranet (or to any git repository).
 
 ```bash
 npm run cli push [options] <project_directory> <git_repository>
@@ -54,6 +54,14 @@ npm run cli push [options] <project_directory> <git_repository>
 - `-h, --help`: Displays the help menu.
 - `-i, --include <pattern>`: Includes only the files matching the pattern.
 - `-n, --norm`: run norminette on your project.
+
+#### Example
+
+```bash
+npm run cli push ~/dev/42/libft git@vogsphere.42paris.fr:vogsphere/intra-xxx -i "(c|h|e)$" -n
+```
+
+We specify the project directory, the git repository, and we include only the files ending with either a `c`, `h` or `e`. In other words, any C file, header file or Makefile. We also run norminette on the project.
 
 # Support/Contributing
 
