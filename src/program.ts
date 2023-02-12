@@ -12,11 +12,11 @@ import push from "./commands/push";
   program
     .command("push")
     .description("Push a new project")
-    .argument("<dir>", "path to project (~/42/libft)")
-    .argument("<url>", "git url (`https` or `ssh`)")
+    .argument("<project_directory>", "path to project (~/42/libft)")
+    .argument("<git_repository>", "git url (`https` or `ssh`)")
     .option(
-      "-c, --clean <pattern>",
-      "remove all files except the ones matching the regex"
+      "-i, --include <pattern>",
+      "includes only the files matching the pattern"
     )
     .option("-n, --norm", "run norminette on your project")
     .action(push);

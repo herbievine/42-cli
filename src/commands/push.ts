@@ -11,7 +11,7 @@ const PushCommand = z.tuple([
       /^(https:\/\/[\w\d-]+\.\w+\/|git@[\w\d-]+\.\w+:)([\w\d-]+\/)*([\w\d-]+\.git)$/
     ),
   z.object({
-    clean: z.string().optional(),
+    include: z.string().optional(),
     norm: z.boolean().optional(),
   }),
   z.any(),
@@ -34,7 +34,7 @@ const push = async (...props: any[]) => {
           return true;
         }
 
-        const regex = new RegExp(opts.clean || "");
+        const regex = new RegExp(opts.include || "");
 
         if (regex.test(src)) return true;
 
@@ -81,7 +81,7 @@ const push = async (...props: any[]) => {
   }
 
   try {
-    console.log(`Cleaning up...`);
+    console.log(`includeing up...`);
 
     await fs.remove(tmpFolder);
   } catch (error) {
