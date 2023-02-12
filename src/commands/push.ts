@@ -52,12 +52,10 @@ const push = async (...props: any[]) => {
     if (opts.norm) {
       console.log(`Running norminette...`);
 
-      await run(
-        `cd ${tmpFolder} && norminette -R CheckForbiddenSourceHeader */*.c */*.h`
-      );
+      await run(`cd ${tmpFolder} && norminette -R CheckForbiddenSourceHeader`);
     }
   } catch (error) {
-    parseError("An error occured while trying to run norminette.", error);
+    parseError("An error occured while trying to run norminette.", error, true);
   }
 
   try {

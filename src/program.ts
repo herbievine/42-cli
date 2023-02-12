@@ -13,7 +13,7 @@ import push from "./commands/push";
     .command("push")
     .description("Push a new project")
     .argument("<dir>", "path to project (~/42/libft)")
-    .argument("<url>", "git url (https://github[...]libft.git)")
+    .argument("<url>", "git url (`https` or `ssh`)")
     .option(
       "-c, --clean <pattern>",
       "remove all files except the ones matching the regex"
