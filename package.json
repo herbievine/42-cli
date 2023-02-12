@@ -1,0 +1,26 @@
+{
+  "name": "cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cli": "./node_modules/.bin/ts-node ./src/program.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "colorette": "^2.0.19",
+    "commander": "^10.0.0",
+    "figlet": "^1.5.2",
+    "fs-extra": "^11.1.0",
+    "zod": "^3.20.6"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.5",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.13.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  }
+}
