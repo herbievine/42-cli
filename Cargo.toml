@@ -5,5 +5,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.1.4", features = ["derive"] }
-regex = "1"
+regex = "1.7.1"
 dirs = "4"
+termcolor = "1.2"
+figlet-rs = "0.1.4"
