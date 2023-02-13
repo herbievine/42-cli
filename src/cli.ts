@@ -18,9 +18,10 @@ import push from "./commands/push";
     .argument("<git_repository>", "git url (`https` or `ssh`)")
     .option(
       "-i, --include <pattern>",
-      "includes only the files matching the pattern"
+      "includes only the files matching the pattern",
+      ""
     )
-    .option("-n, --norm", "run norminette on your project")
+    .option("-n, --norm", "run norminette on your project", false)
     .action(push);
 
   await program.parseAsync(process.argv);

@@ -11,8 +11,8 @@ const PushCommand = z.tuple([
       /^(https:\/\/[\w\d-]+\.\w+\/|git@[\w\d-]+\.\w+:)([\w\d-]+\/)*([\w\d-]+\.git)$/
     ),
   z.object({
-    include: z.string().optional(),
-    norm: z.boolean().optional(),
+    include: z.string(),
+    norm: z.boolean(),
   }),
   z.any(),
 ]);
@@ -81,7 +81,7 @@ const push = async (...props: any[]) => {
   }
 
   try {
-    console.log(`includeing up...`);
+    console.log(`Cleaning up...`);
 
     await fs.remove(tmpFolder);
   } catch (error) {
