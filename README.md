@@ -18,8 +18,9 @@ We've all been there...
 
 ## Requirements
 
-- NodeJS
-- NPM (or Yarn/PNPM)
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Git](https://git-scm.com/downloads)
+- [Norminette](https://github.com/42School/norminette)
 
 ## Install
 
