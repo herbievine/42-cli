@@ -1,0 +1,123 @@
+use dirs::home_dir;
+
+use crate::args::PushArgs;
+use crate::error::display_error;
+use crate::lib;
+use std::fs;
+use std::path::PathBuf;
+
+pub fn exec(args: &PushArgs) {
+    let PushArgs {
+        git_repository,
+        project_directory,
+        include,
+        no_norm,
+    } = args;
+
+    let project_directory = PathBuf::from(project_directory);
+    let project_name = project_directory.file_name().unwrap().to_str().unwrap();
+    let destination_directory = home_dir().unwrap().join("42-cli/tmp").join(project_name);
+
+    match lib::fs::clone_directory(
+        project_directory,
+        destination_directory.clone(),
+        include.as_ref().map(|s| s.as_str()),
+    ) {
+        Ok(_) => println!("Successfully copied directory!"),
+        Err(e) => display_error(e.to_string(), "lib::fs::clone_directory".to_string(), true),
+    }
+
+    if !no_norm {
+        match lib::process::exec_commands(
+            vec!["norminette -R CheckForbiddenSourceHeader"],
+            destination_directory.clone(),
+        ) {
+            Ok(_) => println!("Norminette passed!"),
+            Err(e) => {
+                display_error(e.message, e.command, false);
+                match fs::remove_dir_all(destination_directory.clone()) {
+                    Ok(_) => {
+                        println!("Removed all temporary files!");
+                        std::process::exit(1);
+                    }
+                    Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
+                }
+            }
+        }
+    }
+
+    match lib::git::init(destination_directory.clone()) {
+        Ok(_) => println!("Successfully initialized git!"),
+        Err(e) => {
+            display_error(e.message, e.command, false);
+            match fs::remove_dir_all(destination_directory.clone()) {
+                Ok(_) => {
+                    println!("Removed all temporary files!");
+                    std::process::exit(1);
+                }
+                Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
+            }
+        }
+    }
+
+    match lib::git::add(destination_directory.clone()) {
+        Ok(_) => println!("Successfully added files!"),
+        Err(e) => {
+            display_error(e.message, e.command, false);
+            match fs::remove_dir_all(destination_directory.clone()) {
+                Ok(_) => {
+                    println!("Removed all temporary files!");
+                    std::process::exit(1);
+                }
+                Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
+            }
+        }
+    }
+
+    match lib::git::commit(destination_directory.clone()) {
+        Ok(_) => println!("Successfully committed files!"),
+        Err(e) => {
+            display_error(e.message, e.command, false);
+            match fs::remove_dir_all(destination_directory.clone()) {
+                Ok(_) => {
+                    println!("Removed all temporary files!");
+                    std::process::exit(1);
+                }
+                Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
+            }
+        }
+    }
+
+    match lib::git::add_remote(destination_directory.clone(), git_repository) {
+        Ok(_) => println!("Successfully added remote!"),
+        Err(e) => {
+            display_error(e.message, e.command, false);
+            match fs::remove_dir_all(destination_directory.clone()) {
+                Ok(_) => {
+                    println!("Removed all temporary files!");
+                    std::process::exit(1);
+                }
+                Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
+            }
+        }
+    }
+
+    match lib::git::push(destination_directory.clone()) {
+        Ok(_) => println!("Successfully pushed files!"),
+        Err(e) => {
+            display_error(e.message, e.command, false);
+            match fs::remove_dir_all(destination_directory.clone()) {
+                Ok(_) => {
+                    println!("Removed all temporary files!");
+                    std::process::exit(1);
+                }
+                Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
+            }
+        }
+    }
+
+    match fs::remove_dir_all(destination_directory.clone()) {
+        Ok(_) => println!("Removed all temporary files!"),
+        Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
+    }
+}
