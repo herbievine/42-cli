@@ -26,7 +26,7 @@ We've all been there...
 ```bash
 git clone https://github.com/herbievine/42-cli.git
 cd 42-cli
-npm install # or `yarn` | `pnpm i`
+cargo build --release && cargo install --path .
 ```
 
 # Usage
@@ -38,7 +38,7 @@ npm install # or `yarn` | `pnpm i`
 Displays the help menu.
 
 ```bash
-npm run cli help
+fourtytwo-cli help
 ```
 
 ### `push`
@@ -46,22 +46,22 @@ npm run cli help
 Pushes your project to your 42 intranet (or to any git repository).
 
 ```bash
-npm run cli push [options] <project_directory> <git_repository>
+fourtytwo-cli push [options] <project_directory> <git_repository>
 ```
 
 #### Options
 
-- `-h, --help`: Displays the help menu.
+- `-h, --help`: Print help.
 - `-i, --include <pattern>`: Includes only the files matching the pattern.
-- `-n, --norm`: run norminette on your project.
+- `-n, --no-norm`: Disables the norminette check.
 
 #### Example
 
 ```bash
-npm run cli push ~/dev/42/libft git@vogsphere.42paris.fr:vogsphere/intra-xxx -i "(c|h|e)$" -n
+fourtytwo-cli push ~/dev/42/libft git@vogsphere.42paris.fr:vogsphere/intra-xxx -i "(c|h|e)$"
 ```
 
-We specify the project directory, the git repository, and we include only the files ending with either a `c`, `h` or `e`. In other words, any C file, header file or Makefile. We also run norminette on the project.
+We specify the project directory, the git repository, and we include only the files ending with either a `c`, `h` or `e`. In other words, any C file, header file or Makefile. 
 
 # Support/Contributing
 

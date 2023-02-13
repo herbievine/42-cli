@@ -23,11 +23,11 @@ pub struct PushArgs {
     #[clap(name = "git_repository")]
     pub git_repository: String,
 
-    /// Include only the files which match the given regex
+    /// Includes only the files matching the pattern
     #[clap(short, long)]
     pub include: Option<String>,
 
-    /// Do not run norminette - be careful :)
+    /// Disables the norminette check
     #[clap(short, long)]
     pub no_norm: bool,
 }
