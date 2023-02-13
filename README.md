@@ -64,6 +64,10 @@ fourtytwo-cli push ~/dev/42/libft git@vogsphere.42paris.fr:vogsphere/intra-xxx -
 
 We specify the project directory, the git repository, and we include only the files ending with either a `c`, `h` or `e`. In other words, any C file, header file or Makefile. 
 
+### `update` (WIP)
+
+Updates your project from your 42 intranet (or from any git repository).
+
 # Support/Contributing
 
 If you've found a bug or have a feature request, please open an issue. If you'd like to contribute, please open a pull request.
