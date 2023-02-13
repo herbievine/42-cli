@@ -10,7 +10,7 @@ pub fn commit<P: AsRef<Path>>(target_dir: P) -> Result<(), ExecuteCommandError> 
 }
 
 pub fn push<P: AsRef<Path>>(target_dir: P) -> Result<(), ExecuteCommandError> {
-    exec_commands(vec!["git push -u origin master"], target_dir)
+    exec_commands(vec!["git push -u origin main"], target_dir)
 }
 
 pub fn init<P: AsRef<Path>>(target_dir: P) -> Result<(), ExecuteCommandError> {
