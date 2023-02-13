@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "42-cli": "./src/cli.ts"
+  },
   "scripts": {
-    "cli": "./node_modules/.bin/ts-node ./src/program.ts"
+    "build": "tsc",
+    "start": "./node_modules/.bin/ts-node ./src/cli.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "boxen": "^7.0.1",
     "colorette": "^2.0.19",
     "commander": "^10.0.0",
     "figlet": "^1.5.2",

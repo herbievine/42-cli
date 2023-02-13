@@ -24,9 +24,7 @@ We've all been there...
 ## Install
 
 ```bash
-git clone https://github.com/herbievine/42-cli.git
-cd 42-cli
-npm install # or `yarn` | `pnpm i`
+npm i --location=global https://github.com/herbievine/42-cli.git
 ```
 
 # Usage

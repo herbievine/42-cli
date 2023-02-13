@@ -1,3 +1,5 @@
+#!/usr/bin/env ts-node
+
 import commander from "commander";
 import figlet from "figlet";
 import push from "./commands/push";
