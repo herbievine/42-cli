@@ -1,6 +1,6 @@
 use clap::ArgMatches;
 use dirs::home_dir;
-use regex::{NoExpand, Regex};
+use regex::Regex;
 use std::{
     fs, io,
     path::{Path, PathBuf},
@@ -60,41 +60,10 @@ pub fn run_commands(
         let exe = command.split_whitespace().next().unwrap();
         let args = command.split_whitespace().skip(1).collect::<Vec<_>>();
 
-        let out = Command::new(exe)
+        Command::new(exe)
             .args(args)
-            .current_dir(directory.as_ref().unwrap())
-            .output()
-            .expect("failed to execute process");
-
-        println!("stdout: {}", String::from_utf8_lossy(&out.stdout));
-        println!("stderr: {}", String::from_utf8_lossy(&out.stderr));
+            .current_dir(directory.as_ref().unwrap());
     }
-
-    // let commands: Vec<String> = raw_commands
-    //     .iter()
-    //     .map(|&git_command| {
-    //         let mut command = String::from(git_command);
-    //         if let Some(directory) = &directory {
-    //             command = format!("cd {} && {}", directory.as_ref().display(), "ls -l -a");
-    //         }
-    //         command
-    //     })
-    //     .collect();
-
-    // for command in commands {
-    //     println!("Running command: {}", command);
-
-    //     let exe = command.split_whitespace().next().unwrap();
-    //     let args = command.split_whitespace().skip(1).collect::<Vec<_>>();
-
-    //     let out = Command::new(exe)
-    //         .args(args)
-    //         .output()
-    //         .expect("failed to execute process");
-
-    //     println!("stdout: {}", String::from_utf8_lossy(&out.stdout));
-    //     println!("stderr: {}", String::from_utf8_lossy(&out.stderr));
-    // }
 
     Ok(())
 }
@@ -102,6 +71,7 @@ pub fn run_commands(
 pub fn clone_directory(
     project_directory: impl AsRef<Path>,
     destination_directory: impl AsRef<Path>,
+    pattern: Option<impl AsRef<str> + Copy>,
 ) -> io::Result<()> {
     fs::create_dir_all(&destination_directory)?;
     for entry in fs::read_dir(project_directory)? {
@@ -111,6 +81,7 @@ pub fn clone_directory(
             clone_directory(
                 entry.path(),
                 destination_directory.as_ref().join(entry.file_name()),
+                pattern,
             )?;
         } else {
             fs::copy(

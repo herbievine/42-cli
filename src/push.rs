@@ -1,6 +1,5 @@
 use crate::lib;
 use clap::ArgMatches;
-use std::fs;
 
 pub fn exec(matches: &ArgMatches) {
     let project_directory = match lib::extract_and_check_project_directory(matches) {
