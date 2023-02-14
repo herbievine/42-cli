@@ -14,8 +14,6 @@ pub fn exec_commands<P: AsRef<Path>>(
         let exe = command.split_whitespace().next().unwrap();
         let args = command.split_whitespace().skip(1).collect::<Vec<_>>();
 
-        // println!("Running command: {} {}", exe, args.join(" "));
-
         let output = Command::new(exe)
             .args(args)
             .current_dir(target_dir.as_ref())
@@ -27,7 +25,6 @@ pub fn exec_commands<P: AsRef<Path>>(
             let stderr = String::from_utf8_lossy(&output.stderr).to_string();
             let message = if !stdout.is_empty() { stdout } else { stderr };
 
-            // return Err(Error::new(std::io::ErrorKind::Other, message));
             return Err(ExecuteCommandError {
                 message,
                 command: command.to_string(),

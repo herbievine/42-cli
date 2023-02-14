@@ -3,6 +3,7 @@ mod error;
 mod setup;
 mod commands {
     pub mod push;
+    pub mod update;
 }
 mod lib {
     pub mod fs;
@@ -12,7 +13,7 @@ mod lib {
 
 use args::{CliArgs, Commands};
 use clap::Parser;
-use commands::push;
+use commands::{push, update};
 
 fn main() {
     setup::setup();
@@ -21,5 +22,6 @@ fn main() {
 
     match cli.subcommand {
         Commands::Push(args) => push::exec(&args),
+        Commands::Update(args) => update::exec(&args),
     }
 }

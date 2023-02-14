@@ -64,9 +64,27 @@ fourtytwo-cli push ~/dev/42/libft git@vogsphere.42paris.fr:vogsphere/intra-xxx -
 
 We specify the project directory, the git repository, and we include only the files ending with either a `c`, `h` or `e`. In other words, any C file, header file or Makefile. 
 
-### `update` (WIP)
+### `update`
 
-Updates your project from your 42 intranet (or from any git repository).
+Clone your existing project from your 42 intranet, and override it with your local project.
+
+```bash
+fourtytwo-cli update [options] <project_directory> <git_repository>
+```
+
+#### Options
+
+- `-h, --help`: Print help.
+- `-i, --include <pattern>`: Includes only the files matching the pattern.
+- `-n, --no-norm`: Disables the norminette check.
+
+#### Example
+
+```bash
+fourtytwo-cli update ~/dev/42/libft git@vogsphere.42paris.fr:vogsphere/intra-xxx -i "h$"
+```
+
+We specify the project directory, the git repository, and here, we update only the header files.
 
 # Support/Contributing
 
