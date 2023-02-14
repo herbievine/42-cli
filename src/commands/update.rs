@@ -1,13 +1,13 @@
 use dirs::home_dir;
 
-use crate::args::PushArgs;
+use crate::args::UpdateArgs;
 use crate::error::display_error;
 use crate::lib;
 use std::fs;
 use std::path::PathBuf;
 
-pub fn exec(args: &PushArgs) {
-    let PushArgs {
+pub fn exec(args: &UpdateArgs) {
+    let UpdateArgs {
         git_repository,
         project_directory,
         include,
@@ -23,10 +23,24 @@ pub fn exec(args: &PushArgs) {
         Err(e) => display_error(e.to_string(), "fs::create_dir_all".to_string(), true),
     }
 
+    match lib::git::clone(destination_directory.clone(), git_repository) {
+        Ok(_) => println!("Successfully cloned project!"),
+        Err(e) => {
+            display_error(e.message, e.command, false);
+            match fs::remove_dir_all(destination_directory.clone()) {
+                Ok(_) => {
+                    println!("Removed all temporary files!");
+                    std::process::exit(1);
+                }
+                Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
+            }
+        }
+    }
+
     match lib::fs::merge_directory(
         project_directory,
         destination_directory.clone(),
-        false,
+        true,
         include.as_ref().map(|s| s.as_str()),
     ) {
         Ok(_) => println!("Successfully copied directory!"),
@@ -63,20 +77,6 @@ pub fn exec(args: &PushArgs) {
         }
     }
 
-    match lib::git::init(destination_directory.clone()) {
-        Ok(_) => println!("Successfully initialized git!"),
-        Err(e) => {
-            display_error(e.message, e.command, false);
-            match fs::remove_dir_all(destination_directory.clone()) {
-                Ok(_) => {
-                    println!("Removed all temporary files!");
-                    std::process::exit(1);
-                }
-                Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
-            }
-        }
-    }
-
     match lib::git::add(destination_directory.clone()) {
         Ok(_) => println!("Successfully added files!"),
         Err(e) => {
@@ -93,20 +93,6 @@ pub fn exec(args: &PushArgs) {
 
     match lib::git::commit(destination_directory.clone()) {
         Ok(_) => println!("Successfully committed files!"),
-        Err(e) => {
-            display_error(e.message, e.command, false);
-            match fs::remove_dir_all(destination_directory.clone()) {
-                Ok(_) => {
-                    println!("Removed all temporary files!");
-                    std::process::exit(1);
-                }
-                Err(e) => display_error(e.to_string(), "fs::remove_dir_all".to_string(), true),
-            }
-        }
-    }
-
-    match lib::git::add_remote(destination_directory.clone(), git_repository) {
-        Ok(_) => println!("Successfully added remote!"),
         Err(e) => {
             display_error(e.message, e.command, false);
             match fs::remove_dir_all(destination_directory.clone()) {

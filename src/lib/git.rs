@@ -18,7 +18,7 @@ pub fn push<P: AsRef<Path>>(target_dir: P) -> Result<(), ExecuteCommandError> {
 }
 
 pub fn clone<P: AsRef<Path>>(target_dir: P, remote: &str) -> Result<(), ExecuteCommandError> {
-    let command = format!("git clone {}", remote);
+    let command = format!("git clone {} .", remote);
     exec_commands(vec![&command], target_dir)
 }
 
