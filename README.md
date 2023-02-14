@@ -25,9 +25,7 @@ We've all been there...
 ## Install
 
 ```bash
-git clone https://github.com/herbievine/42-cli.git
-cd 42-cli
-cargo build --release && cargo install --path .
+cargo install --git https://github.com/herbievine/42-cli.git
 ```
 
 # Usage
