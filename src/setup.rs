@@ -8,7 +8,7 @@ pub fn setup() {
 
     match FIGfont::from_content(&String::from_utf8_lossy(font_bytes)) {
         Ok(font) => {
-            let figure = font.convert("42  CLI");
+            let figure = font.convert("42CLI");
             if figure.is_some() {
                 println!("{}", figure.unwrap());
             }
