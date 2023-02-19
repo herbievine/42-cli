@@ -45,10 +45,7 @@ pub fn exec(args: &PushArgs) {
     }
 
     if !no_norm {
-        match lib::process::exec_commands(
-            vec!["norminette -R CheckForbiddenSourceHeader"],
-            destination_directory.clone(),
-        ) {
+        match lib::misc::norm(destination_directory.clone()) {
             Ok(_) => println!("Norminette passed!"),
             Err(e) => {
                 display_error(e.message, e.command, false);

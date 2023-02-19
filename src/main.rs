@@ -8,6 +8,7 @@ mod commands {
 mod lib {
     pub mod fs;
     pub mod git;
+    pub mod misc;
     pub mod process;
 }
 
