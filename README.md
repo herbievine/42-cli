@@ -10,7 +10,7 @@
 
 # Introduction
 
-This is a simple CLI tool to manage your 42 projects, and make sure you don't push an empty project or forget to norminette your code... 
+This is a simple CLI tool to manage your 42 projects, and make sure you don't push an empty project or forget to norminette your code...
 
 We've all been there...
 
@@ -24,8 +24,11 @@ We've all been there...
 
 ## Install
 
+### From GitHub
+
 ```bash
 cargo install --git https://github.com/herbievine/42-cli.git
+alias 42-cli="~/.cargo/bin/fourtytwo-cli" # optional, but recommended
 ```
 
 # Usage
@@ -60,7 +63,7 @@ fourtytwo-cli push [options] <project_directory> <git_repository>
 fourtytwo-cli push ~/dev/42/libft git@vogsphere.42paris.fr:vogsphere/intra-xxx -i "(c|h|e)$"
 ```
 
-We specify the project directory, the git repository, and we include only the files ending with either a `c`, `h` or `e`. In other words, any C file, header file or Makefile. 
+We specify the project directory, the git repository, and we include only the files ending with either a `c`, `h` or `e`. In other words, any C file, header file or Makefile.
 
 ### `update`
 
