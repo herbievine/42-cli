@@ -16,6 +16,18 @@ pub enum Commands {
     /// Run your project
     #[clap(name = "run")]
     Run(RunArgs),
+
+    /// Compile your project
+    #[clap(name = "build")]
+    Build(BuildArgs),
+
+    /// Clean your project
+    #[clap(name = "clean")]
+    Clean(CleanArgs),
+
+    /// Norm your project
+    #[clap(name = "norm")]
+    Norm(NormArgs),
 }
 
 #[derive(Debug, Args)]
@@ -27,3 +39,12 @@ pub struct RunArgs {
     #[clap(short, long, action=ArgAction::SetFalse)]
     pub clean: bool,
 }
+
+#[derive(Debug, Args)]
+pub struct BuildArgs {}
+
+#[derive(Debug, Args)]
+pub struct CleanArgs {}
+
+#[derive(Debug, Args)]
+pub struct NormArgs {}

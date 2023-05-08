@@ -7,25 +7,28 @@ pub struct Config {
     pub scripts: Scripts,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct Command {
     pub cmd: String,
     pub pipe: Option<String>,
     pub dir: Option<String>,
+    pub mlx: Option<bool>,
+    pub mlx_dir: Option<String>,
 }
 
 #[derive(Deserialize)]
 pub struct Scripts {
-    pub install: Option<Vec<Command>>,
+    pub build: Option<Command>,
     pub run: Option<Vec<Command>>,
     pub test: Option<Vec<Command>>,
-    pub clean: Option<Vec<Command>>,
+    pub clean: Option<Command>,
+    pub norm: Option<Command>,
 }
 
 // name = "42-cli"
 
 // [scripts]
-// install = [{ cmd = "echo install" }]
+// build = [{ cmd = "echo build" }]
 // test = [{ cmd = "echo test" }]
 // clean = [{ cmd = "echo clean" }]
 // "#;

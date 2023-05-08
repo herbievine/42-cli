@@ -4,7 +4,7 @@ use std::{
 };
 
 #[derive(Debug)]
-pub struct CommandError {
+pub struct ExecError {
     pub command: String,
     pub trace: String,
     pub exit_code: i32,
@@ -14,7 +14,7 @@ pub fn exec_command<P: AsRef<Path>>(
     command: &str,
     dir: P,
     pipe: Option<&str>,
-) -> Result<(), CommandError> {
+) -> Result<(), ExecError> {
     let exe = command.split_whitespace().next().unwrap();
     let args = command.split_whitespace().skip(1).collect::<Vec<_>>();
 
@@ -51,7 +51,7 @@ pub fn exec_command<P: AsRef<Path>>(
         let stderr = String::from_utf8_lossy(&output.stderr).to_string();
         let message = if !stdout.is_empty() { stdout } else { stderr };
 
-        return Err(CommandError {
+        return Err(ExecError {
             command: command.to_string(),
             trace: message,
             exit_code: output.status.code().unwrap_or(1),
