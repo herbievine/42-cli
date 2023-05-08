@@ -31,7 +31,11 @@ pub enum Commands {
 }
 
 #[derive(Debug, Args)]
-pub struct TestArgs {}
+pub struct TestArgs {
+    /// Run command in children
+    #[clap(long, action=ArgAction::SetFalse)]
+    pub all: bool,
+}
 
 #[derive(Debug, Args)]
 pub struct RunArgs {
@@ -41,10 +45,22 @@ pub struct RunArgs {
 }
 
 #[derive(Debug, Args)]
-pub struct BuildArgs {}
+pub struct BuildArgs {
+    /// Run command in children
+    #[clap(long, action=ArgAction::SetFalse)]
+    pub all: bool,
+}
 
 #[derive(Debug, Args)]
-pub struct CleanArgs {}
+pub struct CleanArgs {
+    /// Run command in children
+    #[clap(long, action=ArgAction::SetFalse)]
+    pub all: bool,
+}
 
 #[derive(Debug, Args)]
-pub struct NormArgs {}
+pub struct NormArgs {
+    /// Run command in children
+    #[clap(long, action=ArgAction::SetFalse)]
+    pub all: bool,
+}

@@ -10,41 +10,18 @@ pub struct ExecError {
     pub exit_code: i32,
 }
 
-pub fn exec_command<P: AsRef<Path>>(
-    command: &str,
-    dir: P,
-    pipe: Option<&str>,
-) -> Result<(), ExecError> {
+pub fn exec_command<P: AsRef<Path>>(command: &str, dir: P) -> Result<(), ExecError> {
     let exe = command.split_whitespace().next().unwrap();
     let args = command.split_whitespace().skip(1).collect::<Vec<_>>();
-
-    let stdout = if pipe.is_some() {
-        Stdio::piped()
-    } else {
-        Stdio::inherit()
-    };
 
     let command_output = Command::new(exe)
         .args(args)
         .current_dir(dir.as_ref())
-        .stdout(stdout)
+        .stdout(Stdio::inherit())
         .spawn()
         .unwrap();
 
-    let output = if let Some(pipe) = pipe {
-        let pipe_exe = pipe.split_whitespace().next().unwrap();
-        let pipe_args = pipe.split_whitespace().skip(1).collect::<Vec<_>>();
-
-        Command::new(pipe_exe)
-            .args(pipe_args)
-            .current_dir(dir.as_ref())
-            .stdin(command_output.stdout.unwrap())
-            .stdout(Stdio::inherit())
-            .output()
-            .unwrap()
-    } else {
-        command_output.wait_with_output().unwrap()
-    };
+    let output = command_output.wait_with_output().unwrap();
 
     if !output.status.success() {
         let stdout = String::from_utf8_lossy(&output.stdout).to_string();

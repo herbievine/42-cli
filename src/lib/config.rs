@@ -1,22 +1,23 @@
 use serde::Deserialize;
 use std::fs;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct Config {
     pub name: String,
     pub scripts: Scripts,
+    pub children: Option<Vec<String>>,
+    pub prepend_path: Option<String>,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Command {
     pub cmd: String,
-    pub pipe: Option<String>,
     pub dir: Option<String>,
     pub mlx: Option<bool>,
     pub mlx_dir: Option<String>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct Scripts {
     pub build: Option<Command>,
     pub run: Option<Vec<Command>>,
@@ -33,8 +34,29 @@ pub struct Scripts {
 // clean = [{ cmd = "echo clean" }]
 // "#;
 
-fn get_raw_config() -> Option<String> {
-    if let Ok(config) = fs::read_to_string("42-cli.toml") {
+impl Config {
+    pub fn new(path: &str) -> Config {
+        let raw_config = get_raw_config(path).unwrap_or_else(|| {
+            println!("Error: No config file found.");
+            std::process::exit(1);
+        });
+        match toml::from_str::<Config>(&raw_config) {
+            Ok(mut config) => {
+                config.prepend_path = Some(String::from(path));
+                config
+            }
+            Err(e) => {
+                println!("Error: {}", e);
+                std::process::exit(1);
+            }
+        }
+    }
+}
+
+fn get_raw_config(path: &str) -> Option<String> {
+    let path = format!("{}/42-cli.toml", path);
+
+    if let Ok(config) = fs::read_to_string(path) {
         Some(config)
     } else {
         None
@@ -42,7 +64,7 @@ fn get_raw_config() -> Option<String> {
 }
 
 pub fn get_config() -> Config {
-    if let Some(raw_config) = get_raw_config() {
+    if let Some(raw_config) = get_raw_config(".") {
         match toml::from_str::<Config>(&raw_config) {
             Ok(config) => config,
             Err(e) => {
