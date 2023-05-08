@@ -8,6 +8,8 @@ use crate::{
 use colored::Colorize;
 
 pub fn exec(args: &RunArgs, config: &Config) -> CommandError {
+    println!("{}", "42 CLI - Run".bright_magenta().bold());
+
     let mut error = CommandError {
         command: String::from(""),
         trace: String::from(""),

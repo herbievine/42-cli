@@ -3,6 +3,7 @@ use std::{
     process::{Command, Stdio},
 };
 
+#[derive(Debug)]
 pub struct CommandError {
     pub command: String,
     pub trace: String,

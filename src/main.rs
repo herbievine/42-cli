@@ -17,14 +17,12 @@ fn main() {
     let cli = CliArgs::parse();
     let config = lib::config::get_config();
 
-    println!("{}", "42 CLI".bright_cyan().bold());
-
     let error = match cli.subcommand {
         Commands::Test(args) => test::exec(&args, &config),
         Commands::Run(args) => run::exec(&args, &config),
     };
 
-    if !error.exit_code != 0 {
+    if error.exit_code != 0 {
         println!(
             "{} `{}`",
             "Error in".bright_red().bold(),
