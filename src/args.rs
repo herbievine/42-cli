@@ -1,4 +1,4 @@
-use clap::{Args, Parser, Subcommand};
+use clap::{ArgAction, Args, Parser, Subcommand};
 
 #[derive(Debug, Parser)]
 #[clap(name = "42 CLI", author, about)]
@@ -9,49 +9,21 @@ pub struct CliArgs {
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
-    /// Pushes your project to 42 vogsphere
-    #[clap(name = "push")]
-    Push(PushArgs),
+    /// Test your project
+    #[clap(name = "test")]
+    Test(TestArgs),
 
-    /// Updates your project from 42 vogsphere
-    #[clap(name = "update")]
-    Update(UpdateArgs),
+    /// Run your project
+    #[clap(name = "run")]
+    Run(RunArgs),
 }
 
 #[derive(Debug, Args)]
-pub struct PushArgs {
-    /// The project directory
-    #[clap(name = "project_directory")]
-    pub project_directory: String,
-
-    /// The git repository
-    #[clap(name = "git_repository")]
-    pub git_repository: String,
-
-    /// Includes only the files matching the pattern
-    #[clap(short, long)]
-    pub include: Option<String>,
-
-    /// Disables the norminette check
-    #[clap(short, long)]
-    pub no_norm: bool,
-}
+pub struct TestArgs {}
 
 #[derive(Debug, Args)]
-pub struct UpdateArgs {
-    /// The project directory
-    #[clap(name = "project_directory")]
-    pub project_directory: String,
-
-    /// The git repository
-    #[clap(name = "git_repository")]
-    pub git_repository: String,
-
-    /// Includes only the files matching the pattern
-    #[clap(short, long)]
-    pub include: Option<String>,
-
-    /// Disables the norminette check
-    #[clap(short, long)]
-    pub no_norm: bool,
+pub struct RunArgs {
+    /// Run clean command after run
+    #[clap(short, long, action=ArgAction::SetFalse)]
+    pub clean: bool,
 }
