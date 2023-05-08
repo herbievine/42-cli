@@ -1,88 +1,69 @@
 use crate::{
     args::TestArgs,
-    lib::{config::Config, process},
+    lib::{
+        config::Config,
+        process::{self, CommandError},
+    },
 };
+use colored::Colorize;
 
-pub fn exec(_: &TestArgs, config: &Config) {
-    // let TestArgs {
-    //     program,
-    //     arguments,
-    //     make,
-    //     ..
-    // } = args;
+pub fn exec(_: &TestArgs, config: &Config) -> CommandError {
+    let mut error = CommandError {
+        command: String::from(""),
+        trace: String::from(""),
+        exit_code: 0,
+    };
 
     if config.scripts.install.is_some() {
-        println!("Running install script...");
+        println!("{}", "Running install script...".bright_green().bold());
 
         for script in config.scripts.install.as_ref().unwrap() {
-            match process::exec_commands(
-                vec![&script.cmd],
+            match process::exec_command(
+                &script.cmd,
                 script.dir.as_ref().unwrap_or(&String::from(".")),
+                script.pipe.as_ref().map(|x| &**x),
             ) {
                 Ok(_) => (),
-                Err(e) => {
-                    println!("{}", e.message);
-                    std::process::exit(1);
-                }
+                Err(e) => error = e,
             }
         }
     } else {
-        println!("No install script found.");
+        println!("{}", "No install script found.".yellow());
     }
 
     if config.scripts.test.is_some() {
-        println!("Running test script...");
+        println!("{}", "Running test script...".bright_green().bold());
+
         for script in config.scripts.test.as_ref().unwrap() {
-            match process::exec_commands(
-                vec![&script.cmd],
+            match process::exec_command(
+                &script.cmd,
                 script.dir.as_ref().unwrap_or(&String::from(".")),
+                script.pipe.as_ref().map(|x| &**x),
             ) {
                 Ok(_) => (),
-                Err(e) => {
-                    println!("{}", e.message);
-                    std::process::exit(1);
-                }
+                Err(e) => error = e,
             }
         }
     } else {
-        println!("No test script found.");
+        println!("{}", "No test script found.".yellow());
     }
 
     if config.scripts.clean.is_some() {
-        println!("Running clean script...");
+        println!("{}", "Running cleanup script...".bright_green().bold());
+
         for script in config.scripts.clean.as_ref().unwrap() {
-            match process::exec_commands(
-                vec![&script.cmd],
+            match process::exec_command(
+                &script.cmd,
                 script.dir.as_ref().unwrap_or(&String::from(".")),
+                script.pipe.as_ref().map(|x| &**x),
             ) {
                 Ok(_) => (),
-                Err(e) => {
-                    println!("{}", e.message);
-                    std::process::exit(1);
-                }
+                Err(e) => error = e,
             }
         }
     } else {
-        println!("No clean script found.");
+        println!("{}", "No clean script found.".yellow());
     }
 
-    // let program_path = match fs::canonicalize(&PathBuf::from(config.program.as_ref().unwrap())) {
-    //     Ok(path) => path,
-    //     Err(e) => {
-    //         println!("{:?}", e);
-    //         std::process::exit(1);
-    //     }
-    // };
-    // let mut program_command = String::from(program_path.to_str().unwrap());
-    // program_command.push(' ');
-    // program_command.push_str(&arguments.join(" "));
-
-    // match process::exec_commands(vec![&program_command], project_directory) {
-    //     Ok(_) => println!("Exit code: 0"),
-    //     Err(e) => {
-    //         println!("{:?}", e.message);
-    //         println!("Exit code: 1");
-    //         std::process::exit(1);
-    //     }
-    // }
+    error
 }
