@@ -8,19 +8,13 @@
     ###  ##########            ########  ########## ###########
 </pre>
 
-# Introduction
-
-This is a simple CLI tool to manage your 42 projects, and make sure you don't push an empty project or forget to norminette your code...
-
-We've all been there...
+This is a simple CLI tool to test your 42 projects.
 
 # Installation
 
 ## Requirements
 
 - [Rust](https://www.rust-lang.org/tools/install)
-- [Git](https://git-scm.com/downloads)
-- [Norminette](https://github.com/42School/norminette)
 
 ## Install
 
@@ -28,10 +22,38 @@ We've all been there...
 
 ```bash
 cargo install --git https://github.com/herbievine/42-cli.git
-alias 42-cli="~/.cargo/bin/fourtytwo-cli" # optional, but recommended
+
+# Add the following to your .bashrc or .zshrc to persist the alias
+alias 42-cli="~/.cargo/bin/fourtytwo-cli"
 ```
 
 # Usage
+
+## Config file
+
+You will need to create a `42-cli.toml` file in each of your projects. This file will contain the following information:
+
+```toml
+# The name of the project
+name = "pipex"
+
+[scripts]
+# The install script (optional)
+install = [{ cmd = "make" }]
+
+# The test script (optional)
+test = [
+  { cmd = "git clone xxx tester" },
+  { cmd = "make m", dir = "tester" },
+  { cmd = "rm -rf tester" }
+]
+
+# The cleanup script (optional)
+clean = [{ cmd = "make fclean" }]
+```
+
+Each script is defined by a command a directory (optional). The command is the command to run, and the directory is the directory in which the command will be run. If no directory is specified, the command will be run in the project directory.
+
 
 ## Commands
 
@@ -43,49 +65,26 @@ Displays the help menu.
 fourtytwo-cli help
 ```
 
-### `push`
+### `test`
 
-Pushes your project to your 42 intranet (or to any git repository).
+Run the test script defined in the `42-cli.toml` file.
 
 ```bash
-fourtytwo-cli push [options] <project_directory> <git_repository>
+fourtytwo-cli test
 ```
 
 #### Options
 
 - `-h, --help`: Print help.
-- `-i, --include <pattern>`: Includes only the files matching the pattern.
-- `-n, --no-norm`: Disables the norminette check.
 
 #### Example
 
 ```bash
-fourtytwo-cli push ~/dev/42/libft git@vogsphere.42paris.fr:vogsphere/intra-xxx -i "(c|h|e)$"
+fourtytwo-cli test
+Running install script...
+Running test script...
+Running clean script...
 ```
-
-We specify the project directory, the git repository, and we include only the files ending with either a `c`, `h` or `e`. In other words, any C file, header file or Makefile.
-
-### `update`
-
-Clone your existing project from your 42 intranet, and override it with your local project.
-
-```bash
-fourtytwo-cli update [options] <project_directory> <git_repository>
-```
-
-#### Options
-
-- `-h, --help`: Print help.
-- `-i, --include <pattern>`: Includes only the files matching the pattern.
-- `-n, --no-norm`: Disables the norminette check.
-
-#### Example
-
-```bash
-fourtytwo-cli update ~/dev/42/libft git@vogsphere.42paris.fr:vogsphere/intra-xxx -i "h$"
-```
-
-We specify the project directory, the git repository, and here, we update only the header files.
 
 # Support/Contributing
 

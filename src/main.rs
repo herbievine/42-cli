@@ -1,28 +1,23 @@
 mod args;
-mod error;
-mod setup;
 mod commands {
-    pub mod push;
-    pub mod update;
+    pub mod test;
 }
 mod lib {
-    pub mod fs;
-    pub mod git;
-    pub mod misc;
+    pub mod config;
     pub mod process;
 }
 
 use args::{CliArgs, Commands};
 use clap::Parser;
-use commands::{push, update};
+use commands::test;
 
 fn main() {
-    setup::setup();
-
     let cli = CliArgs::parse();
+    let config = lib::config::get_config();
 
     match cli.subcommand {
-        Commands::Push(args) => push::exec(&args),
-        Commands::Update(args) => update::exec(&args),
+        Commands::Push(_) => (),
+        Commands::Test(args) => test::exec(&args, &config),
+        Commands::Update(_) => (),
     }
 }

@@ -16,6 +16,10 @@ pub enum Commands {
     /// Updates your project from 42 vogsphere
     #[clap(name = "update")]
     Update(UpdateArgs),
+
+    /// Test
+    #[clap(name = "test")]
+    Test(TestArgs),
 }
 
 #[derive(Debug, Args)]
@@ -54,4 +58,19 @@ pub struct UpdateArgs {
     /// Disables the norminette check
     #[clap(short, long)]
     pub no_norm: bool,
+}
+
+#[derive(Debug, Args)]
+pub struct TestArgs {
+    // /// Program to Test
+    // #[clap()]
+    // pub program: String,
+
+    // /// Arguments to pass to the program
+    // #[clap()]
+    // pub arguments: Vec<String>,
+
+    // /// Test make
+    // #[clap(short, long)]
+    // pub make: bool,
 }
