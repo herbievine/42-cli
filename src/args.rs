@@ -1,4 +1,4 @@
-use clap::{Args, Parser, Subcommand};
+use clap::{ArgAction, Args, Parser, Subcommand};
 
 #[derive(Debug, Parser)]
 #[clap(name = "42 CLI", author, about)]
@@ -12,7 +12,18 @@ pub enum Commands {
     /// Test your project
     #[clap(name = "test")]
     Test(TestArgs),
+
+    /// Run your project
+    #[clap(name = "run")]
+    Run(RunArgs),
 }
 
 #[derive(Debug, Args)]
 pub struct TestArgs {}
+
+#[derive(Debug, Args)]
+pub struct RunArgs {
+    /// Run clean command after run
+    #[clap(short, long, action=ArgAction::SetFalse)]
+    pub clean: bool,
+}

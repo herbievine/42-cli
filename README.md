@@ -65,6 +65,19 @@ Displays the help menu.
 fourtytwo-cli help
 ```
 
+### `run`
+
+Run your project with the defined commands in the `42-cli.toml` file.
+
+```bash
+fourtytwo-cli run
+```
+
+#### Options
+
+- `-h, --help`: Print help.
+- `-c, --clean`: Run the clean script defined in the `42-cli.toml` file.
+
 ### `test`
 
 Run the test script defined in the `42-cli.toml` file.
@@ -76,15 +89,6 @@ fourtytwo-cli test
 #### Options
 
 - `-h, --help`: Print help.
-
-#### Example
-
-```bash
-fourtytwo-cli test
-Running install script...
-Running test script...
-Running clean script...
-```
 
 # Support/Contributing
 

@@ -1,5 +1,6 @@
 mod args;
 mod commands {
+    pub mod run;
     pub mod test;
 }
 mod lib {
@@ -10,7 +11,7 @@ mod lib {
 use args::{CliArgs, Commands};
 use clap::Parser;
 use colored::Colorize;
-use commands::test;
+use commands::{run, test};
 
 fn main() {
     let cli = CliArgs::parse();
@@ -20,6 +21,7 @@ fn main() {
 
     let error = match cli.subcommand {
         Commands::Test(args) => test::exec(&args, &config),
+        Commands::Run(args) => run::exec(&args, &config),
     };
 
     if !error.exit_code != 0 {

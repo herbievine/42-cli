@@ -17,6 +17,7 @@ pub struct Command {
 #[derive(Deserialize)]
 pub struct Scripts {
     pub install: Option<Vec<Command>>,
+    pub run: Option<Vec<Command>>,
     pub test: Option<Vec<Command>>,
     pub clean: Option<Vec<Command>>,
 }
