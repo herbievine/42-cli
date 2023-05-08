@@ -13,12 +13,14 @@ enum MlxAction {
 }
 
 fn run_action(config: &Config, commands: &Vec<Command>, step: &str) -> Result<(), ExecError> {
-    println!(
-        "{} {} {}",
-        "Running".bright_green().bold(),
-        step.bright_green().bold(),
-        "script...".bright_green().bold()
-    );
+    if config.prepend_path.is_none() {
+        println!(
+            "{} {} {}",
+            "Running".bright_green().bold(),
+            step.bright_green().bold(),
+            "script...".bright_green().bold()
+        );
+    }
 
     for script in commands {
         let dir = match &config.prepend_path {
@@ -68,9 +70,30 @@ fn run_children(
 }
 
 fn manage_mlx(config: &Config, script: &Command, action: MlxAction) -> Result<(), ExecError> {
-    if action == MlxAction::Install {
-        println!("{}", "Installing MLX...".bright_green().bold());
+    let msg = if action == MlxAction::Install {
+        "Installing MLX"
+    } else {
+        "Removing MLX"
+    };
 
+    if config.prepend_path.is_some() {
+        println!(
+            "{} {} {}{}",
+            msg.bright_green().bold(),
+            "script in".bright_green().bold(),
+            config
+                .prepend_path
+                .as_ref()
+                .unwrap()
+                .bright_magenta()
+                .bold(),
+            "...".bright_green().bold()
+        );
+    } else {
+        println!("{}", msg);
+    };
+
+    if action == MlxAction::Install {
         let mlx_dir = if script.mlx_dir.is_some() {
             script.mlx_dir.as_ref().unwrap()
         } else {
@@ -89,9 +112,7 @@ fn manage_mlx(config: &Config, script: &Command, action: MlxAction) -> Result<()
         );
 
         process::exec_command(&command, ".")?;
-    } else if action == MlxAction::Remove {
-        println!("{}", "Removing MLX...".bright_green().bold());
-
+    } else {
         let mlx_dir = if script.mlx_dir.is_some() {
             script.mlx_dir.as_ref().unwrap()
         } else {
