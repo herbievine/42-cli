@@ -16,14 +16,51 @@ pub enum Commands {
     /// Run your project
     #[clap(name = "run")]
     Run(RunArgs),
+
+    /// Compile your project
+    #[clap(name = "build")]
+    Build(BuildArgs),
+
+    /// Clean your project
+    #[clap(name = "clean")]
+    Clean(CleanArgs),
+
+    /// Lint your project
+    #[clap(name = "lint")]
+    Lint(LintArgs),
 }
 
 #[derive(Debug, Args)]
-pub struct TestArgs {}
+pub struct TestArgs {
+    /// Run command in children
+    #[clap(long, action=ArgAction::SetFalse)]
+    pub all: bool,
+}
 
 #[derive(Debug, Args)]
 pub struct RunArgs {
     /// Run clean command after run
     #[clap(short, long, action=ArgAction::SetFalse)]
     pub clean: bool,
+}
+
+#[derive(Debug, Args)]
+pub struct BuildArgs {
+    /// Run command in children
+    #[clap(long, action=ArgAction::SetFalse)]
+    pub all: bool,
+}
+
+#[derive(Debug, Args)]
+pub struct CleanArgs {
+    /// Run command in children
+    #[clap(long, action=ArgAction::SetFalse)]
+    pub all: bool,
+}
+
+#[derive(Debug, Args)]
+pub struct LintArgs {
+    /// Run command in children
+    #[clap(long, action=ArgAction::SetFalse)]
+    pub all: bool,
 }

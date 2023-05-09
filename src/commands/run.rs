@@ -1,74 +1,37 @@
-use crate::{
-    args::RunArgs,
-    lib::{
-        config::Config,
-        process::{self, CommandError},
-    },
-};
 use colored::Colorize;
 
-pub fn exec(args: &RunArgs, config: &Config) -> CommandError {
+use crate::{
+    args::RunArgs,
+    lib::{actions, config::Config, process::ExecError},
+};
+
+pub fn exec(args: &RunArgs, config: &Config) -> Result<(), ExecError> {
     println!("{}", "42 CLI - Run".bright_magenta().bold());
 
-    let mut error = CommandError {
+    let RunArgs { clean } = args;
+    let mut error = ExecError {
         command: String::from(""),
         trace: String::from(""),
         exit_code: 0,
     };
-    let RunArgs { clean } = args;
 
-    if config.scripts.install.is_some() {
-        println!("{}", "Running install script...".bright_green().bold());
-
-        for script in config.scripts.install.as_ref().unwrap() {
-            match process::exec_command(
-                &script.cmd,
-                script.dir.as_ref().unwrap_or(&String::from(".")),
-                script.pipe.as_ref().map(|x| &**x),
-            ) {
-                Ok(_) => (),
-                Err(e) => error = e,
-            }
-        }
-    } else {
-        println!("{}", "No install script found.".yellow());
+    if let Err(e) = actions::build(config) {
+        error = e;
     }
 
-    if config.scripts.run.is_some() {
-        println!("{}", "Running run script...".bright_green().bold());
-
-        for script in config.scripts.run.as_ref().unwrap() {
-            match process::exec_command(
-                &script.cmd,
-                script.dir.as_ref().unwrap_or(&String::from(".")),
-                script.pipe.as_ref().map(|x| &**x),
-            ) {
-                Ok(_) => (),
-                Err(e) => error = e,
-            }
-        }
-    } else {
-        println!("{}", "No test script found.".yellow());
+    if let Err(e) = actions::run(config) {
+        error = e;
     }
 
     if *clean {
         println!("{}", "Not running cleanup script.".yellow());
-    } else if config.scripts.clean.is_some() {
-        println!("{}", "Running cleanup script...".bright_green().bold());
-
-        for script in config.scripts.clean.as_ref().unwrap() {
-            match process::exec_command(
-                &script.cmd,
-                script.dir.as_ref().unwrap_or(&String::from(".")),
-                script.pipe.as_ref().map(|x| &**x),
-            ) {
-                Ok(_) => (),
-                Err(e) => error = e,
-            }
-        }
-    } else {
-        println!("{}", "No clean script found.".yellow());
+    } else if let Err(e) = actions::clean(config) {
+        error = e;
     }
 
-    error
+    if error.exit_code != 0 {
+        return Err(error);
+    }
+
+    Ok(())
 }

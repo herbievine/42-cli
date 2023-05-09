@@ -1,37 +1,54 @@
 use serde::Deserialize;
 use std::fs;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct Config {
     pub name: String,
     pub scripts: Scripts,
+    pub projects: Option<Vec<String>>,
+    pub run_in: Option<String>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Command {
     pub cmd: String,
-    pub pipe: Option<String>,
     pub dir: Option<String>,
+    pub mlx: Option<bool>,
+    pub mlx_dir: Option<String>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct Scripts {
-    pub install: Option<Vec<Command>>,
+    pub build: Option<Command>,
     pub run: Option<Vec<Command>>,
     pub test: Option<Vec<Command>>,
-    pub clean: Option<Vec<Command>>,
+    pub clean: Option<Command>,
+    pub lint: Option<Command>,
 }
 
-// name = "42-cli"
+impl Config {
+    pub fn new(path: &str) -> Config {
+        let raw_config = get_raw_config(path).unwrap_or_else(|| {
+            println!("Error: No config file found.");
+            std::process::exit(1);
+        });
+        match toml::from_str::<Config>(&raw_config) {
+            Ok(mut config) => {
+                config.run_in = Some(String::from(path));
+                config
+            }
+            Err(e) => {
+                println!("Error: {}", e);
+                std::process::exit(1);
+            }
+        }
+    }
+}
 
-// [scripts]
-// install = [{ cmd = "echo install" }]
-// test = [{ cmd = "echo test" }]
-// clean = [{ cmd = "echo clean" }]
-// "#;
+fn get_raw_config(path: &str) -> Option<String> {
+    let path = format!("{}/42-cli.toml", path);
 
-fn get_raw_config() -> Option<String> {
-    if let Ok(config) = fs::read_to_string("42-cli.toml") {
+    if let Ok(config) = fs::read_to_string(path) {
         Some(config)
     } else {
         None
@@ -39,7 +56,7 @@ fn get_raw_config() -> Option<String> {
 }
 
 pub fn get_config() -> Config {
-    if let Some(raw_config) = get_raw_config() {
+    if let Some(raw_config) = get_raw_config(".") {
         match toml::from_str::<Config>(&raw_config) {
             Ok(config) => config,
             Err(e) => {

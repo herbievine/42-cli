@@ -1,12 +1,11 @@
-use colored::Colorize;
-
 use crate::{
-    args::TestArgs,
+    args::BuildArgs,
     lib::{actions, config::Config, process::ExecError},
 };
+use colored::Colorize;
 
-pub fn exec(_: &TestArgs, config: &Config) -> Result<(), ExecError> {
-    println!("{}", "42 CLI - Test".bright_magenta().bold());
+pub fn exec(_: &BuildArgs, config: &Config) -> Result<(), ExecError> {
+    println!("{}", "42 CLI - Build".bright_magenta().bold());
 
     let mut error = ExecError {
         command: String::from(""),
@@ -15,14 +14,6 @@ pub fn exec(_: &TestArgs, config: &Config) -> Result<(), ExecError> {
     };
 
     if let Err(e) = actions::build(config) {
-        error = e;
-    }
-
-    if let Err(e) = actions::test(config) {
-        error = e;
-    }
-
-    if let Err(e) = actions::clean(config) {
         error = e;
     }
 
