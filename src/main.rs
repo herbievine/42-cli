@@ -2,7 +2,7 @@ mod args;
 mod commands {
     pub mod build;
     pub mod clean;
-    pub mod norm;
+    pub mod lint;
     pub mod run;
     pub mod test;
 }
@@ -15,7 +15,7 @@ mod lib {
 use args::{CliArgs, Commands};
 use clap::Parser;
 use colored::Colorize;
-use commands::{build, clean, norm, run, test};
+use commands::{build, clean, lint, run, test};
 
 fn main() {
     let cli = CliArgs::parse();
@@ -24,7 +24,7 @@ fn main() {
     if let Err(error) = match cli.subcommand {
         Commands::Build(args) => build::exec(&args, &config),
         Commands::Clean(args) => clean::exec(&args, &config),
-        Commands::Norm(args) => norm::exec(&args, &config),
+        Commands::Lint(args) => lint::exec(&args, &config),
         Commands::Test(args) => test::exec(&args, &config),
         Commands::Run(args) => run::exec(&args, &config),
     } {

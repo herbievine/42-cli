@@ -5,8 +5,8 @@ use std::fs;
 pub struct Config {
     pub name: String,
     pub scripts: Scripts,
-    pub children: Option<Vec<String>>,
-    pub prepend_path: Option<String>,
+    pub projects: Option<Vec<String>>,
+    pub run_in: Option<String>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -23,16 +23,8 @@ pub struct Scripts {
     pub run: Option<Vec<Command>>,
     pub test: Option<Vec<Command>>,
     pub clean: Option<Command>,
-    pub norm: Option<Command>,
+    pub lint: Option<Command>,
 }
-
-// name = "42-cli"
-
-// [scripts]
-// build = [{ cmd = "echo build" }]
-// test = [{ cmd = "echo test" }]
-// clean = [{ cmd = "echo clean" }]
-// "#;
 
 impl Config {
     pub fn new(path: &str) -> Config {
@@ -42,7 +34,7 @@ impl Config {
         });
         match toml::from_str::<Config>(&raw_config) {
             Ok(mut config) => {
-                config.prepend_path = Some(String::from(path));
+                config.run_in = Some(String::from(path));
                 config
             }
             Err(e) => {

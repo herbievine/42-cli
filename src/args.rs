@@ -25,9 +25,9 @@ pub enum Commands {
     #[clap(name = "clean")]
     Clean(CleanArgs),
 
-    /// Norm your project
-    #[clap(name = "norm")]
-    Norm(NormArgs),
+    /// Lint your project
+    #[clap(name = "lint")]
+    Lint(LintArgs),
 }
 
 #[derive(Debug, Args)]
@@ -59,7 +59,7 @@ pub struct CleanArgs {
 }
 
 #[derive(Debug, Args)]
-pub struct NormArgs {
+pub struct LintArgs {
     /// Run command in children
     #[clap(long, action=ArgAction::SetFalse)]
     pub all: bool,

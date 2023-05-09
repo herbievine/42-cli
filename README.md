@@ -8,13 +8,14 @@
     ###  ##########            ########  ########## ###########
 </pre>
 
-This is a simple CLI tool to test your 42 projects.
+This is a simple CLI tool to manage, test and run your 42 projects.
 
 # Installation
 
 ## Requirements
 
 - [Rust](https://www.rust-lang.org/tools/install)
+- [Norminette](https://github.com/42School/norminette) (Optional)
 
 ## Install
 
@@ -24,7 +25,7 @@ This is a simple CLI tool to test your 42 projects.
 cargo install --git https://github.com/herbievine/42-cli.git
 
 # Add the following to your .bashrc or .zshrc to persist the alias
-alias 42-cli="~/.cargo/bin/fourtytwo-cli"
+alias ft="~/.cargo/bin/fourtytwo-cli"
 ```
 
 # Usage
@@ -50,9 +51,12 @@ test = [
 
 # The cleanup script (optional)
 clean = [{ cmd = "make fclean" }]
+
+# The lint script (optional)
+lint = [{ cmd = "norminette ." }]
 ```
 
-Each script is defined by a command a directory (optional). The command is the command to run, and the directory is the directory in which the command will be run. If no directory is specified, the command will be run in the project directory.
+Each script is defined by an array of commands. They will be executed in the order they are defined.
 
 
 ## Commands
@@ -62,15 +66,27 @@ Each script is defined by a command a directory (optional). The command is the c
 Displays the help menu.
 
 ```bash
-fourtytwo-cli help
+ft help
 ```
+
+### `build`
+
+Build your project with the defined `build` scripts in the `42-cli.toml` file.
+
+```bash
+ft build
+```
+
+#### Options
+
+- `-h, --help`: Print help.
 
 ### `run`
 
-Run your project with the defined commands in the `42-cli.toml` file.
+Run your project with the defined commands in the `42-cli.toml` file. It will first run the `build` script if defined.
 
 ```bash
-fourtytwo-cli run
+ft run
 ```
 
 #### Options
@@ -80,10 +96,34 @@ fourtytwo-cli run
 
 ### `test`
 
-Run the test script defined in the `42-cli.toml` file.
+Run the test script defined in the `42-cli.toml` file. It will first run the `build` script if defined, and run the `clean` script once the test is done (even if it fails).
 
 ```bash
 fourtytwo-cli test
+```
+
+#### Options
+
+- `-h, --help`: Print help.
+
+### `clean`
+
+Run the clean script defined in the `42-cli.toml` file.
+
+```bash
+fourtytwo-cli clean
+```
+
+#### Options
+
+- `-h, --help`: Print help.
+
+### `lint`
+
+Run the lint script defined in the `42-cli.toml` file.
+
+```bash
+fourtytwo-cli lint
 ```
 
 #### Options

@@ -13,7 +13,7 @@ enum MlxAction {
 }
 
 fn run_action(config: &Config, commands: &Vec<Command>, step: &str) -> Result<(), ExecError> {
-    if config.prepend_path.is_none() {
+    if config.run_in.is_none() {
         println!(
             "{} {} {}",
             "Running".bright_green().bold(),
@@ -23,7 +23,7 @@ fn run_action(config: &Config, commands: &Vec<Command>, step: &str) -> Result<()
     }
 
     for script in commands {
-        let dir = match &config.prepend_path {
+        let dir = match &config.run_in {
             Some(path) => format!(
                 "{}/{}",
                 path,
@@ -45,24 +45,24 @@ fn run_action(config: &Config, commands: &Vec<Command>, step: &str) -> Result<()
     Ok(())
 }
 
-fn run_children(
+fn run_projects(
     config: &Config,
     f: &dyn Fn(&Config) -> Result<(), ExecError>,
     step: &str,
 ) -> Result<(), ExecError> {
-    if let Some(children) = &config.children {
-        for child_path in children {
+    if let Some(projects) = &config.projects {
+        for project_path in projects {
             println!(
                 "{} {} {} {}{}",
                 "Running".bright_green().bold(),
                 step.bright_green().bold(),
                 "script in".bright_green().bold(),
-                child_path.bright_magenta().bold(),
+                project_path.bright_magenta().bold(),
                 "...".bright_green().bold()
             );
 
-            let child_config = Config::new(child_path);
-            f(&child_config)?;
+            let project_config = Config::new(project_path);
+            f(&project_config)?;
         }
     }
 
@@ -76,21 +76,20 @@ fn manage_mlx(config: &Config, script: &Command, action: MlxAction) -> Result<()
         "Removing MLX"
     };
 
-    if config.prepend_path.is_some() {
+    if config.run_in.is_some() {
         println!(
             "{} {} {}{}",
             msg.bright_green().bold(),
             "script in".bright_green().bold(),
-            config
-                .prepend_path
-                .as_ref()
-                .unwrap()
-                .bright_magenta()
-                .bold(),
+            config.run_in.as_ref().unwrap().bright_magenta().bold(),
             "...".bright_green().bold()
         );
     } else {
-        println!("{}", msg);
+        println!(
+            "{}{}",
+            msg.bright_green().bold(),
+            "...".bright_green().bold()
+        );
     };
 
     if action == MlxAction::Install {
@@ -100,8 +99,8 @@ fn manage_mlx(config: &Config, script: &Command, action: MlxAction) -> Result<()
             "mlx"
         };
 
-        let mlx_dir = if config.prepend_path.is_some() {
-            format!("{}/{}", config.prepend_path.as_ref().unwrap(), mlx_dir)
+        let mlx_dir = if config.run_in.is_some() {
+            format!("{}/{}", config.run_in.as_ref().unwrap(), mlx_dir)
         } else {
             mlx_dir.to_string()
         };
@@ -119,8 +118,8 @@ fn manage_mlx(config: &Config, script: &Command, action: MlxAction) -> Result<()
             "mlx"
         };
 
-        let mlx_dir = if config.prepend_path.is_some() {
-            format!("{}/{}", config.prepend_path.as_ref().unwrap(), mlx_dir)
+        let mlx_dir = if config.run_in.is_some() {
+            format!("{}/{}", config.run_in.as_ref().unwrap(), mlx_dir)
         } else {
             mlx_dir.to_string()
         };
@@ -142,7 +141,7 @@ pub fn build(config: &Config) -> Result<(), ExecError> {
         }
         run_action(config, &vec![script.clone()], "build")?;
     } else {
-        run_children(config, &build, "build")?;
+        run_projects(config, &build, "build")?;
     }
 
     Ok(())
@@ -152,7 +151,7 @@ pub fn test(config: &Config) -> Result<(), ExecError> {
     if let Some(scripts) = &config.scripts.test {
         run_action(config, &scripts, "test")?;
     } else {
-        run_children(config, &test, "test")?;
+        run_projects(config, &test, "test")?;
     }
 
     Ok(())
@@ -175,17 +174,17 @@ pub fn clean(config: &Config) -> Result<(), ExecError> {
             }
         }
     } else {
-        run_children(config, &clean, "clean")?;
+        run_projects(config, &clean, "clean")?;
     }
 
     Ok(())
 }
 
-pub fn norm(config: &Config) -> Result<(), ExecError> {
-    if let Some(script) = &config.scripts.norm {
-        run_action(config, &vec![script.clone()], "norm")?;
+pub fn lint(config: &Config) -> Result<(), ExecError> {
+    if let Some(script) = &config.scripts.lint {
+        run_action(config, &vec![script.clone()], "lint")?;
     } else {
-        run_children(config, &norm, "norm")?;
+        run_projects(config, &lint, "lint")?;
     }
 
     Ok(())
