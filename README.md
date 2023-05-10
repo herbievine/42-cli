@@ -30,36 +30,96 @@ alias ft="~/.cargo/bin/fourtytwo-cli"
 
 # Usage
 
+When you have a config file present in your project, 42 CLI will attempt to run your command. There are a few speciad attributes which come with these commands, like installing MLX and executing a command in a specific directory.
+
 ## Config file
 
-You will need to create a `42-cli.toml` file in each of your projects. This file will contain the following information:
+You will need to create a `42-cli.toml` file in each of your projects. This file will look something like this:
 
 ```toml
 # The name of the project
-name = "pipex"
+name = "push_swap"
 
 [scripts]
-# The install script (optional)
-install = [{ cmd = "make" }]
-
-# The test script (optional)
-test = [
-  { cmd = "git clone xxx tester" },
-  { cmd = "make m", dir = "tester" },
-  { cmd = "rm -rf tester" }
+build = { cmd = "make" }
+run = [
+  { cmd = "./push_swap 8 2 -2 0 2147483647" },
+  { cmd = "./push_swap invalid :(" },
 ]
-
-# The cleanup script (optional)
-clean = [{ cmd = "make fclean" }]
-
-# The lint script (optional)
-lint = [{ cmd = "norminette ." }]
 ```
 
-Each script is defined by an array of commands. They will be executed in the order they are defined.
+## Examples
 
+Here, it is used in the `so_long` project. Each script is defined by an object (except `run` and `test` which contain an array of objects) with special keys to automate your development.
 
-## Commands
+```toml
+name = "so_long"
+
+[scripts]
+build = { cmd = "make", mlx = true, mlx_dir = "minilibx" }
+run = [{ cmd = "./so_long maps/small.ber" }]
+clean = { cmd = "make fclean", mlx = true, mlx_dir = "minilibx" }
+lint = { cmd = "norminette ." }
+```
+
+Here you have 4 scripts: 
+- `build`, which will run `make` after installing MLX in the `minilibx` directory.
+- `run`, which will execute after running `build` (if present), and run `./so_long maps/small.ber` (`clean` can also be run at the end. See API Reference below)
+- `clean`, which will run `make fclean`, and then delete MLX.
+- `lint`, which simply runs norminette on your code.
+
+Here is also an example with `ft_printf`, which contains a test suite to execute:
+
+```toml
+name = "ft_printf"
+
+[scripts]
+build = { cmd = "make" }
+test = [
+	{ cmd = "git clone https://github.com/Tripouille/printfTester.git tester" },
+	{ cmd = "make m", dir = "tester" },
+	{ cmd = "rm -rf tester" }
+]
+clean = { cmd = "make fclean" }
+lint = { cmd = "norminette ." }
+```
+
+In this example, you will notice there is a `test` script, which executes the defined scripts one-by-one. The `test` script will execute the `build` script, and run the `clean` script after finishing (only if they are defined).
+
+## Usage in CI/CD
+
+If you want to automate your deployements, or simply run commands on each of your projects in on command, you can create a config file in the head of your directory, like so:
+
+```
+42/
+├─ libft/
+│  ├─ 42-cli.toml
+├─ ft_printf/
+│  ├─ 42-cli.toml
+├─ get_next_line/
+│  ├─ 42-cli.toml
+├─ 42-cli.toml
+```
+
+The root `42-cli.toml` file should contain a key called `projects`, which all your projects defined as strings.
+
+```toml
+name = "42"
+projects = [
+	"libft",
+	"ft_printf",
+	"get_next_line"
+]
+
+# Leave this empty
+[scripts]
+```
+
+42 CLI will attempt to run your command in each of the defined projects, if it's not present, it will just skip it.
+
+> Note: the `run` command cannot be run as root.
+
+## API Reference
 
 ### `help`
 
