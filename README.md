@@ -86,6 +86,39 @@ lint = { cmd = "norminette ." }
 
 In this example, you will notice there is a `test` script, which executes the defined scripts one-by-one. The `test` script will execute the `build` script, and run the `clean` script after finishing (only if they are defined).
 
+## Usage in CI/CD
+
+If you want to automate your deployements, or simply run commands on each of your projects in on command, you can create a config file in the head of your directory, like so:
+
+```
+42/
+├─ libft/
+│  ├─ 42-cli.toml
+├─ ft_printf/
+│  ├─ 42-cli.toml
+├─ get_next_line/
+│  ├─ 42-cli.toml
+├─ 42-cli.toml
+```
+
+The root `42-cli.toml` file should contain a key called `projects`, which all your projects defined as strings.
+
+```toml
+name = "42"
+projects = [
+	"libft",
+	"ft_printf",
+	"get_next_line"
+]
+
+# Leave this empty
+[scripts]
+```
+
+42 CLI will attempt to run your command in each of the defined projects, if it's not present, it will just skip it.
+
+> Note: the `run` command cannot be run as root.
+
 ## API Reference
 
 ### `help`
