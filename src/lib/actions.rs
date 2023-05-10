@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use crate::lib::process;
 use colored::Colorize;
 
@@ -105,6 +107,10 @@ fn manage_mlx(config: &Config, script: &Command, action: MlxAction) -> Result<()
             mlx_dir.to_string()
         };
 
+        if Path::new(&mlx_dir).exists() {
+            return Ok(());
+        }
+
         let command = format!(
             "git clone https://github.com/42Paris/minilibx-linux.git {}",
             mlx_dir
@@ -123,6 +129,10 @@ fn manage_mlx(config: &Config, script: &Command, action: MlxAction) -> Result<()
         } else {
             mlx_dir.to_string()
         };
+
+        if !Path::new(&mlx_dir).exists() {
+            return Ok(());
+        }
 
         let command = format!("rm -rf {}", mlx_dir);
 
