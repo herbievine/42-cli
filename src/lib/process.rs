@@ -12,7 +12,7 @@ pub struct ExecError {
 
 pub fn exec_command<P: AsRef<Path>>(command: &str, dir: P) -> Result<(), ExecError> {
     let exe = command.split_whitespace().next().unwrap();
-    let args = command.split_whitespace().skip(1).collect::<Vec<_>>();
+    let args = command.split_whitespace().skip(1).collect::<Vec<&str>>();
 
     if let Ok(command_output) = Command::new(exe)
         .args(args)

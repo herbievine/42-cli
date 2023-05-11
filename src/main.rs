@@ -1,11 +1,4 @@
 mod args;
-mod commands {
-    pub mod build;
-    pub mod clean;
-    pub mod lint;
-    pub mod run;
-    pub mod test;
-}
 mod lib {
     pub mod actions;
     pub mod config;
@@ -15,18 +8,19 @@ mod lib {
 use args::{CliArgs, Commands};
 use clap::Parser;
 use colored::Colorize;
-use commands::{build, clean, lint, run, test};
+
+use crate::lib::config::Config;
 
 fn main() {
     let cli = CliArgs::parse();
-    let config = lib::config::get_config();
+    let config = Config::new(".");
 
     if let Err(error) = match cli.subcommand {
-        Commands::Build(args) => build::exec(&args, &config),
-        Commands::Clean(args) => clean::exec(&args, &config),
-        Commands::Lint(args) => lint::exec(&args, &config),
-        Commands::Test(args) => test::exec(&args, &config),
-        Commands::Run(args) => run::exec(&args, &config),
+        Commands::Build(_) => config.build(),
+        Commands::Clean(_) => config.clean(),
+        Commands::Lint(_) => config.lint(),
+        Commands::Test(_) => config.test(),
+        Commands::Run(args) => config.run(&args),
     } {
         println!(
             "{} {}",
