@@ -6,7 +6,6 @@ use std::{
 #[derive(Debug)]
 pub struct ExecError {
     pub command: String,
-    pub trace: String,
     pub exit_code: i32,
 }
 
@@ -23,13 +22,8 @@ pub fn exec_command<P: AsRef<Path>>(command: &str, dir: P) -> Result<(), ExecErr
         let output = command_output.wait_with_output().unwrap();
 
         if !output.status.success() {
-            let stdout = String::from_utf8_lossy(&output.stdout).to_string();
-            let stderr = String::from_utf8_lossy(&output.stderr).to_string();
-            let message = if !stdout.is_empty() { stdout } else { stderr };
-
             return Err(ExecError {
                 command: command.to_string(),
-                trace: message,
                 exit_code: output.status.code().unwrap_or(1),
             });
         }
@@ -38,7 +32,6 @@ pub fn exec_command<P: AsRef<Path>>(command: &str, dir: P) -> Result<(), ExecErr
     } else {
         return Err(ExecError {
             command: command.to_string(),
-            trace: String::from(""),
             exit_code: 1,
         });
     }

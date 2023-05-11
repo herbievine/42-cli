@@ -28,7 +28,6 @@ fn main() {
             config.name.bright_red().bold()
         );
         println!("{} {}", "Error running:".red().bold(), error.command.red());
-        println!("{} {}", "Trace:".red().bold(), error.trace.red());
         std::process::exit(error.exit_code);
     }
 
