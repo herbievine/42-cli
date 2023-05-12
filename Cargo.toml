@@ -1,5 +1,7 @@
 [package]
-name = "fourtytwo-cli"
+name = "ft"
+description = "A command line tool to manage, test and run your 42 projects."
+license = "MIT"
 version = "0.1.0"
 edition = "2021"
 

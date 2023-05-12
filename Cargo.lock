@@ -161,7 +161,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "fourtytwo-cli"
+name = "ft"
 version = "0.1.0"
 dependencies = [
  "clap",
