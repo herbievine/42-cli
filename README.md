@@ -23,9 +23,20 @@ This is a simple CLI tool to manage, test and run your 42 projects.
 
 ```bash
 cargo install --git https://github.com/herbievine/42-cli.git
+```
 
-# Add the following to your .bashrc or .zshrc to persist the alias
-alias ft="~/.cargo/bin/fourtytwo-cli"
+### From crates.io
+
+```bash
+cargo install ftcli
+```
+
+### Setup alias
+
+We recomment adding this line to your `.bashrc` or `.zshrc` to persist the `ft` alias.
+
+```bash
+alias ft="ftcli"
 ```
 
 # Usage
