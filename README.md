@@ -25,6 +25,20 @@ This is a simple CLI tool to manage, test and run your 42 projects.
 cargo install --git https://github.com/herbievine/42-cli.git
 ```
 
+### From crates.io
+
+```bash
+cargo install ftcli
+```
+
+### Setup alias
+
+We recomment adding this line to your `.bashrc` or `.zshrc` to persist the `ft` alias.
+
+```bash
+alias ft="ftcli"
+```
+
 # Usage
 
 When you have a config file present in your project, 42 CLI will attempt to run your command. There are a few speciad attributes which come with these commands, like installing MLX and executing a command in a specific directory.

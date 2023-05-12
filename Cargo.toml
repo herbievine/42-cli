@@ -3,7 +3,7 @@ name = "ftcli"
 description = "A command line tool to manage, test and run your 42 projects."
 authors = ["Herbie Vine <me@herbievine.com>"]
 license = "MIT"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 [dependencies]
