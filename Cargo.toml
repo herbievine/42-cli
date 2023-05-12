@@ -1,5 +1,5 @@
 [package]
-name = "ft"
+name = "ftcli"
 description = "A command line tool to manage, test and run your 42 projects."
 authors = ["Herbie Vine <me@herbievine.com>"]
 license = "MIT"
