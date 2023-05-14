@@ -171,7 +171,7 @@ clean = [{ cmd = "make fclean" }]
         }
 
         if !args.clean {
-            println!("{}", "Not running cleanup script.".yellow());
+            println!("{}", "Not running cleanup script.".bright_yellow().bold());
         } else if let Err(e) = actions::clean(self) {
             error = e;
         }
