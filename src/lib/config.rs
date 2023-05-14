@@ -2,7 +2,10 @@ use colored::Colorize;
 use serde::Deserialize;
 use std::fs;
 
-use crate::{args::RunArgs, lib::actions};
+use crate::{
+    args::{BuildArgs, CleanArgs, LintArgs, RunArgs, TestArgs},
+    lib::actions,
+};
 
 use super::process::ExecError;
 
@@ -12,6 +15,7 @@ pub struct Config {
     pub scripts: Scripts,
     pub projects: Option<Vec<String>>,
     pub run_in: Option<String>,
+    pub silent_mode: Option<bool>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -82,8 +86,10 @@ clean = [{ cmd = "make fclean" }]
     }
 
     /// Run the build script.
-    pub fn build(&self) -> Result<(), ExecError> {
+    pub fn build(&mut self, args: &BuildArgs) -> Result<(), ExecError> {
         println!("{}", "42 CLI - Build".bright_magenta().bold());
+
+        self.silent_mode = Some(args.silent);
 
         let mut error = ExecError {
             command: String::from(""),
@@ -102,8 +108,10 @@ clean = [{ cmd = "make fclean" }]
     }
 
     /// Run the clean script.
-    pub fn clean(&self) -> Result<(), ExecError> {
+    pub fn clean(&mut self, args: &CleanArgs) -> Result<(), ExecError> {
         println!("{}", "42 CLI - Clean".bright_magenta().bold());
+
+        self.silent_mode = Some(args.silent);
 
         let mut error = ExecError {
             command: String::from(""),
@@ -122,8 +130,10 @@ clean = [{ cmd = "make fclean" }]
     }
 
     /// Run the lint script.
-    pub fn lint(&self) -> Result<(), ExecError> {
+    pub fn lint(&mut self, args: &LintArgs) -> Result<(), ExecError> {
         println!("{}", "42 CLI - Lint".bright_magenta().bold());
+
+        self.silent_mode = Some(args.silent);
 
         let mut error = ExecError {
             command: String::from(""),
@@ -142,10 +152,11 @@ clean = [{ cmd = "make fclean" }]
     }
 
     /// Run the run script (dependency on `build`).
-    pub fn run(&self, args: &RunArgs) -> Result<(), ExecError> {
+    pub fn run(&mut self, args: &RunArgs) -> Result<(), ExecError> {
         println!("{}", "42 CLI - Run".bright_magenta().bold());
 
-        let RunArgs { clean } = args;
+        self.silent_mode = Some(args.silent);
+
         let mut error = ExecError {
             command: String::from(""),
             exit_code: 0,
@@ -159,7 +170,7 @@ clean = [{ cmd = "make fclean" }]
             error = e;
         }
 
-        if *clean {
+        if !args.clean {
             println!("{}", "Not running cleanup script.".yellow());
         } else if let Err(e) = actions::clean(self) {
             error = e;
@@ -173,8 +184,10 @@ clean = [{ cmd = "make fclean" }]
     }
 
     /// Run the test script (dependency on `build`).
-    pub fn test(&self) -> Result<(), ExecError> {
+    pub fn test(&mut self, args: &TestArgs) -> Result<(), ExecError> {
         println!("{}", "42 CLI - Test".bright_magenta().bold());
+
+        self.silent_mode = Some(args.silent);
 
         let mut error = ExecError {
             command: String::from(""),

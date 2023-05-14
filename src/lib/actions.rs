@@ -38,7 +38,7 @@ fn run_action(config: &Config, commands: &Vec<Command>, step: &str) -> Result<()
                 .to_string(),
         };
 
-        match process::exec_command(&script.cmd, dir) {
+        match process::exec_command(&script.cmd, dir, config) {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
@@ -116,7 +116,7 @@ fn manage_mlx(config: &Config, script: &Command, action: MlxAction) -> Result<()
             mlx_dir
         );
 
-        process::exec_command(&command, ".")?;
+        process::exec_command(&command, ".", config)?;
     } else {
         let mlx_dir = if script.mlx_dir.is_some() {
             script.mlx_dir.as_ref().unwrap()
@@ -136,7 +136,7 @@ fn manage_mlx(config: &Config, script: &Command, action: MlxAction) -> Result<()
 
         let command = format!("rm -rf {}", mlx_dir);
 
-        process::exec_command(&command, ".")?;
+        process::exec_command(&command, ".", config)?;
     }
 
     Ok(())

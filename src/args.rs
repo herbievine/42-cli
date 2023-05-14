@@ -1,7 +1,7 @@
-use clap::{ArgAction, Args, Parser, Subcommand};
+use clap::{Args, Parser, Subcommand};
 
 #[derive(Debug, Parser)]
-#[clap(name = "42 CLI", author, about)]
+#[clap(name = "42 CLI", version, author, about)]
 pub struct CliArgs {
     #[clap(subcommand)]
     pub subcommand: Commands,
@@ -32,35 +32,39 @@ pub enum Commands {
 
 #[derive(Debug, Args)]
 pub struct TestArgs {
-    /// Run command in children
-    #[clap(long, action=ArgAction::SetFalse)]
-    pub all: bool,
+    /// Silent mode
+    #[clap(short, long)]
+    pub silent: bool,
 }
 
 #[derive(Debug, Args)]
 pub struct RunArgs {
+    /// Silent mode
+    #[clap(short, long)]
+    pub silent: bool,
+
     /// Run clean command after run
-    #[clap(short, long, action=ArgAction::SetFalse)]
+    #[clap(short, long)]
     pub clean: bool,
 }
 
 #[derive(Debug, Args)]
 pub struct BuildArgs {
-    /// Run command in children
-    #[clap(long, action=ArgAction::SetFalse)]
-    pub all: bool,
+    /// Silent mode
+    #[clap(short, long)]
+    pub silent: bool,
 }
 
 #[derive(Debug, Args)]
 pub struct CleanArgs {
-    /// Run command in children
-    #[clap(long, action=ArgAction::SetFalse)]
-    pub all: bool,
+    /// Silent mode
+    #[clap(short, long)]
+    pub silent: bool,
 }
 
 #[derive(Debug, Args)]
 pub struct LintArgs {
-    /// Run command in children
-    #[clap(long, action=ArgAction::SetFalse)]
-    pub all: bool,
+    /// Silent mode
+    #[clap(short, long)]
+    pub silent: bool,
 }

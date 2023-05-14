@@ -13,13 +13,13 @@ use crate::lib::config::Config;
 
 fn main() {
     let cli = CliArgs::parse();
-    let config = Config::new(".");
+    let mut config = Config::new(".");
 
     if let Err(error) = match cli.subcommand {
-        Commands::Build(_) => config.build(),
-        Commands::Clean(_) => config.clean(),
-        Commands::Lint(_) => config.lint(),
-        Commands::Test(_) => config.test(),
+        Commands::Build(args) => config.build(&args),
+        Commands::Clean(args) => config.clean(&args),
+        Commands::Lint(args) => config.lint(&args),
+        Commands::Test(args) => config.test(&args),
         Commands::Run(args) => config.run(&args),
     } {
         println!(
