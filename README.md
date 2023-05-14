@@ -150,6 +150,7 @@ ft build
 
 #### Options
 
+- `-s, --silent`: Don't print the output of the build script.
 - `-h, --help`: Print help.
 
 ### `run`
@@ -162,8 +163,9 @@ ft run
 
 #### Options
 
-- `-h, --help`: Print help.
+- `-s, --silent`: Don't print the output of the run script.
 - `-c, --clean`: Run the clean script defined in the `42-cli.toml` file.
+- `-h, --help`: Print help.
 
 ### `test`
 
@@ -175,6 +177,7 @@ fourtytwo-cli test
 
 #### Options
 
+- `-s, --silent`: Don't print the output of the test script.
 - `-h, --help`: Print help.
 
 ### `clean`
@@ -187,6 +190,7 @@ fourtytwo-cli clean
 
 #### Options
 
+- `-s, --silent`: Don't print the output of the clean script.
 - `-h, --help`: Print help.
 
 ### `lint`
@@ -199,6 +203,7 @@ fourtytwo-cli lint
 
 #### Options
 
+- `-s, --silent`: Don't print the output of the lint script.
 - `-h, --help`: Print help.
 
 # Support/Contributing
