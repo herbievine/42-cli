@@ -9,7 +9,7 @@ use crate::{
 
 use super::process::ExecError;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Default)]
 pub struct Config {
     pub name: String,
     pub scripts: Scripts,
@@ -18,7 +18,7 @@ pub struct Config {
     pub silent_mode: Option<bool>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default)]
 pub struct Command {
     pub cmd: String,
     pub dir: Option<String>,
@@ -26,7 +26,7 @@ pub struct Command {
     pub mlx_dir: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Default)]
 pub struct Scripts {
     pub build: Option<Command>,
     pub run: Option<Vec<Command>>,

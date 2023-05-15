@@ -63,7 +63,10 @@ fn run_projects(
                 "...".bright_green().bold()
             );
 
-            let project_config = Config::new(project_path);
+            let project_config = Config {
+                silent_mode: config.silent_mode,
+                ..Config::new(&project_path)
+            };
             f(&project_config)?;
         }
     }
