@@ -93,6 +93,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
@@ -115,6 +116,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
@@ -137,6 +139,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
@@ -159,6 +162,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
@@ -191,6 +195,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
