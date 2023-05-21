@@ -51,9 +51,9 @@ impl Config {
             let default_config = r#"name = "42-cli"
 
 [scripts]
-install = [{ cmd = "make re" }]
+install = { cmd = "make re" }
 test = [{ cmd = "echo test script" }]
-clean = [{ cmd = "make fclean" }]
+clean = { cmd = "make fclean" }
 "#;
             match fs::write("42-cli.toml", default_config) {
                 Ok(_) => {
