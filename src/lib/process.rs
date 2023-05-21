@@ -8,6 +8,7 @@ use super::config::Config;
 #[derive(Debug)]
 pub struct ExecError {
     pub command: String,
+    pub context: String,
     pub exit_code: i32,
 }
 
@@ -41,6 +42,7 @@ pub fn exec_command<P: AsRef<Path>>(
         if !output.status.success() {
             return Err(ExecError {
                 command: command.to_string(),
+                context: config.name.clone(),
                 exit_code: output.status.code().unwrap_or(1),
             });
         }
@@ -49,6 +51,7 @@ pub fn exec_command<P: AsRef<Path>>(
     } else {
         return Err(ExecError {
             command: command.to_string(),
+            context: config.name.clone(),
             exit_code: 1,
         });
     }

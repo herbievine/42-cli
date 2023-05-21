@@ -38,10 +38,7 @@ fn run_action(config: &Config, commands: &Vec<Command>, step: &str) -> Result<()
                 .to_string(),
         };
 
-        match process::exec_command(&script.cmd, dir, config) {
-            Ok(_) => (),
-            Err(e) => return Err(e),
-        }
+        process::exec_command(&script.cmd, dir, config)?;
     }
 
     Ok(())
@@ -57,13 +54,14 @@ fn run_projects(
             println!(
                 "{} {} {} {}{}",
                 "Running".bright_green().bold(),
-                step.bright_green().bold(),
-                "script in".bright_green().bold(),
+                step.bright_magenta().bold(),
+                "in".bright_green().bold(),
                 project_path.bright_magenta().bold(),
                 "...".bright_green().bold()
             );
 
             let project_config = Config {
+                name: project_path.to_string(),
                 silent_mode: config.silent_mode,
                 ..Config::new(&project_path)
             };

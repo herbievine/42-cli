@@ -25,7 +25,7 @@ fn main() {
         println!(
             "{} {}",
             "Error in:".bright_red().bold(),
-            config.name.bright_red().bold()
+            error.context.bright_red().bold()
         );
         println!("{} {}", "Error running:".red().bold(), error.command.red());
         std::process::exit(error.exit_code);

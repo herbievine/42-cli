@@ -51,9 +51,9 @@ impl Config {
             let default_config = r#"name = "42-cli"
 
 [scripts]
-install = [{ cmd = "make re" }]
+install = { cmd = "make re" }
 test = [{ cmd = "echo test script" }]
-clean = [{ cmd = "make fclean" }]
+clean = { cmd = "make fclean" }
 "#;
             match fs::write("42-cli.toml", default_config) {
                 Ok(_) => {
@@ -93,6 +93,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
@@ -115,6 +116,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
@@ -137,6 +139,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
@@ -159,6 +162,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
@@ -191,6 +195,7 @@ clean = [{ cmd = "make fclean" }]
 
         let mut error = ExecError {
             command: String::from(""),
+            context: String::from(""),
             exit_code: 0,
         };
 
